@@ -45,7 +45,7 @@ unless ($SNP_infile =~ /.bgz$/) {
 }
 
 # check for tabix index file
-unless (-e $SNP_infile.'tbi') {
+unless (-e $SNP_infile.'.tbi') {
 	print "snp file must be indexed with Tabix!\n";
 	print "try: tabix -b 2 -e 2 -s 1 myfile.snp.bgz\n";
 }
