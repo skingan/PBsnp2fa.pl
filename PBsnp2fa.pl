@@ -61,7 +61,7 @@ my $coordinates = $ARGV[2] or die $usage;
 my $chrom;
 my $start;
 my $end;
-if ($coordinates =~ /([0-9]{0,1}[A-Z]):([0-9]+)-([0-9]+)/) {
+if ($coordinates =~ /(\S+):([0-9]+)-([0-9]+)/) {
 	$chrom = $1;
 	$start = $2;
 	$end = $3; 
