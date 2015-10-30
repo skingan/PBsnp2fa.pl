@@ -5,6 +5,7 @@
 #		Sarah B. Kingan
 #		University of Rochester
 #		1 October 2014
+#		updated 30 October 2015
 #
 #		Title: PBsnp2fa.pl
 #
@@ -34,8 +35,18 @@ use Tabix;
 my $usage = "PBsnp2fa.pl <snp.bgz> <ref.fa> <chrom:start-end> <OPT:sample_list.txt>\n";
 
 
-# Setup tabix-index snp file
+# Check that user has write permissions for SNP file directory
 my $SNP_infile = $ARGV[0] or die $usage;
+my @path_array = split("/", $SNP_infile);
+pop @path_array;
+my $path = join("/", @path_array);
+my $r; my $w; my $x;
+($r,$w,$x) = (-r $path, -w _, -x _);
+unless ($w == 1) {
+	print "Error: you do not have write permissions for SNP file directory!\n";
+	exit;
+}
+# Setup tabix-index snp file
 my $SNP_tabix = Tabix->new(-data => $SNP_infile);
 
 # check if snp file is bgzipped
@@ -50,11 +61,9 @@ unless (-e $SNP_infile.'.tbi') {
 	print "try: tabix -b 2 -e 2 -s 1 myfile.snp.bgz\n";
 }
 
-
 # Setup reference fasta database
 my $ref_fasta_file = $ARGV[1] or die $usage;
 my $ref_fastaDB = Bio::DB::Fasta->new($ref_fasta_file);
-
 
 # Get region coordinates
 my $coordinates = $ARGV[2] or die $usage;
@@ -163,6 +172,3 @@ sub makeSampleArray {
 
 
 exit;
-
-
-
